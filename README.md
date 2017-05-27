@@ -106,7 +106,7 @@ In code cell 12, I trained a linear SVM using LinearSVC.
 
 I decided to use sliding window search with 3 different scales as can be seen below:
 
-<img src="output_images/sliding_window.png" >
+<img src="output_images/sliding_window2.png" >
 
 The left image are the windows with no overlap, so that it is easier to see the size of the windows. The idea of using the 3 scales is very simple: Objects (Cars) appear bigger when they are nearer to the camera and gradually become smaller as they go farther. Thus the biggest scale windows (green) is put at the lowest end of the image, the middle scale windows (red) are at the middle of the image, and the smallest scale windows (blue) are at the upper end of the road where the cars will appear smallest. 
 
