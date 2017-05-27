@@ -98,7 +98,7 @@ hog_channel = 'ALL'<br>
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+In code cell 12, I trained a linear SVM using LinearSVC.
 
 ### Sliding Window Search
 
