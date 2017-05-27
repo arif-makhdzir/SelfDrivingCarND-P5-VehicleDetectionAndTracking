@@ -1,8 +1,3 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Vehicle Detection Project**
 
 The goals / steps of this project are the following:
@@ -28,25 +23,19 @@ The goals / steps of this project are the following:
 ###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
+### Histogram of Oriented Gradients (HOG)
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
-
-###Histogram of Oriented Gradients (HOG)
-
-####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+#### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
-![alt text][image1]
+<img src="output_images/car_notcar.png">
 
 The code to extract HOG features is contained in the helper function extract_features() in the 2nd code cell of the IPython notebook.
 
 Here is an example of a HOG visualization of a car image in the dataset with parameters orient=8, pix_per_cell=8, cell_per_block=2:
 
-![alt text][image1]
+<img src="output_images/hog_vis.png">
 
 I then explored different color spaces for feature extraction.  I grabbed random images from each of the two classes and displayed them in these color spaces in order to get a feel which one might be most useful as features to saperate between the car/not-car images:
 1) RGB
@@ -57,15 +46,21 @@ I then explored different color spaces for feature extraction.  I grabbed random
 
 Here is an example of color spaces of a random car image:
 
-![alt text][image1]
+<img src="output_images/car_cs_rgb.pngg">
+<img src="output_images/car_cs_hsv.png">
+<img src="output_images/car_cs_luv.png">
+<img src="output_images/car_cs_yuv.png">
+<img src="output_images/car_cs_YCrCb.png">
 
 Here is an example of color spaces of a random not-car image:
 
-![alt text][image1]
+<img src="output_images/notcar_cs_rgb.pngg">
+<img src="output_images/notcar_cs_hsv.png">
+<img src="output_images/notcar_cs_luv.png">
+<img src="output_images/notcar_cs_yuv.png">
+<img src="output_images/notcar_cs_YCrCb.png">
 
 From the visualization, honestly I can't make up which color space would be best to use to as features to differentiate between cars/not-cars images, they all seem to be able to differentiate cars/not-cars, but none really stand out as better than the other to me. So I will do trial-and-error with each one of them to get highest accuracy on the validation set. 
-
-![alt text][image2]
 
 ####2. Explain how you settled on your final choice of HOG parameters.
 
@@ -73,11 +68,11 @@ Firstly I try to visualize how three different combinations of the HOG parameter
 
 Here are the HOG visualized of a random car image for different Orient, Pix/Cell, Cells/block, and Channel parameters:
 
-![alt text][image2]
+<img src="output_images/hog_car_vis_ext.png">
 
 This is the same procedure for a random not-car image:
 
-![alt text][image2]
+<img src="output_images/hog_notcar_vis_ext.png">
 
 Looks to me the bigger Orient, Pix/Cell, Cells/block might make better features as there are less blocks that look the same between car/not-car, thus might result in less false positive detection.
 
@@ -91,7 +86,6 @@ Anyhow, I proceed with trial-and-error a few parameters to get the highest accur
 | 32     | 16            |   2         |   YCrCb     | 98.6    |
 
 Final parameters settings:
-#Final parameters after all tunings & trial and error
 color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 spatial_size = (32, 32) # Spatial binning dimensions
 hist_bins = 16    # Number of histogram bins
@@ -112,7 +106,7 @@ I trained a linear SVM using...
 
 I decided to use sliding window search with 3 different scales as can be seen below:
 
-![alt text][image3]
+<img src="output_images/sliding_window.png" >
 
 The left image are the windows with no overlap, so that it is easier to see the size of the windows. The idea of using the 3 scales is very simple: Objects (Cars) appear bigger when they are nearer to the camera and gradually become smaller as they go farther. Thus the biggest scale windows (green) is put at the lowest end of the image, the middle scale windows (red) are at the middle of the image, and the smallest scale windows (blue) are at the upper end of the road where the cars will appear smallest. 
 
@@ -130,7 +124,7 @@ colors = [(0,255,0), (255,0,0), (0,0,255), (0,128,128), (128,0,128)]
 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
-![alt text][image4]
+<img src="output_images/hog_notcar_vis_ext.png">
 
 For optimization of the performance of the classifier, this has already been described in question 2 (HOG parameters tuning) above.
 ---
