@@ -19,8 +19,8 @@ The goals / steps of this project are the following:
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+## [Rubric Points](https://review.udacity.com/#!/rubrics/513/view)
+### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Histogram of Oriented Gradients (HOG)
@@ -46,7 +46,7 @@ I then explored different color spaces for feature extraction.  I grabbed random
 
 Here is an example of color spaces of a random car image:
 
-<img src="output_images/car_cs_rgb.pngg">
+<img src="output_images/car_cs_rgb.png">
 <img src="output_images/car_cs_hsv.png">
 <img src="output_images/car_cs_luv.png">
 <img src="output_images/car_cs_yuv.png">
@@ -54,7 +54,7 @@ Here is an example of color spaces of a random car image:
 
 Here is an example of color spaces of a random not-car image:
 
-<img src="output_images/notcar_cs_rgb.pngg">
+<img src="output_images/notcar_cs_rgb.png">
 <img src="output_images/notcar_cs_hsv.png">
 <img src="output_images/notcar_cs_luv.png">
 <img src="output_images/notcar_cs_yuv.png">
@@ -85,24 +85,24 @@ Anyhow, I proceed with trial-and-error a few parameters to get the highest accur
 | 8      | 8             |   2         |   YCrCb     | 96.9    |
 | 32     | 16            |   2         |   YCrCb     | 98.6    |
 
-Final parameters settings:
-color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
-spatial_size = (32, 32) # Spatial binning dimensions
-hist_bins = 16    # Number of histogram bins
+Final parameters settings:<br>
+color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb <br>
+spatial_size = (32, 32) # Spatial binning dimensions<br>
+hist_bins = 16    # Number of histogram bins<br>
+<br>
+orient = 32  # HOG orientations<br>
+pix_per_cell = 16 # HOG pixels per cell<br>
+cell_per_block = 2 # HOG cells per block<br>
+hog_channel = 'ALL'<br>
 
-orient = 32  # HOG orientations
-pix_per_cell = 16 # HOG pixels per cell
-cell_per_block = 2 # HOG cells per block
-hog_channel = 'ALL'
 
-
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM using...
 
-###Sliding Window Search
+### Sliding Window Search
 
-####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 I decided to use sliding window search with 3 different scales as can be seen below:
 
@@ -113,14 +113,14 @@ The left image are the windows with no overlap, so that it is easier to see the 
 Note: I use high overlapping so that I can filter out false positive when we generate heatmap later.
 
 The final parameters of the window search is as below:
+<br>
+xy_windows = [(170, 170),(128, 128),(76, 76)]<br>
+overlaps = [0.50, 0.85, 0.75]<br>
+y_start_stops = [[500, 720],[400,720],[400,600]]<br>
+x_start_stops = [[600, 1280],[730, 1280],[730, 1280]]<br>
+colors = [(0,255,0), (255,0,0), (0,0,255), (0,128,128), (128,0,128)]<br>
 
-xy_windows = [(170, 170),(128, 128),(76, 76)]
-overlaps = [0.50, 0.85, 0.75]
-y_start_stops = [[500, 720],[400,720],[400,600]]
-x_start_stops = [[600, 1280],[730, 1280],[730, 1280]]
-colors = [(0,255,0), (255,0,0), (0,0,255), (0,128,128), (128,0,128)]
-
-####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+#### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
@@ -131,11 +131,11 @@ For optimization of the performance of the classifier, this has already been des
 
 ### Video Implementation
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
+#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 Here's a [link to my video result](./project_video.mp4)
 
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+#### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle, with a treshold of 4.  I constructed bounding boxes to cover the area of each blob detected.
 
@@ -148,9 +148,9 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 My pipeline will likely to fail in the below scenarios:
 1. The self-driving car is driving on right most lanes, and the cars it should detect will now be on the left lane. The way the sliding window is implemented is that it will search only on certain pixel x+, as to prevent it from finding cars on the opposite side of the highway
